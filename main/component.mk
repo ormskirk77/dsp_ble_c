@@ -6,3 +6,7 @@
 # in the build directory. This behaviour is entirely configurable,
 # please read the ESP-IDF documents if you need to do this.
 #
+
+#COMPONENT_ADD_INCLUDEDIRS := /main/SigmaStudioFiles
+#COMPONENT_SRDIRS += ./main/SigmaStudioFiles/
+#COMPONENT_ADD_INCLUDES += ./main/SigmaStudioFiles/

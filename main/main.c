@@ -4,29 +4,40 @@
  #include "esp_system.h"
  #include "esp_log.h"
  #include "nvs_flash.h"
- #include "esp_bt.h"
-#include "esp_a2dp_api.h"
-#include "esp_avrc_api.h"
+
 #include "driver/i2s.h"
+
 #include "bt_app_core.h"
 #include "bt_app_av.h"
+
+#include "esp_bt.h"
+#include "esp_bt_main.h"
+#include "esp_bt_device.h"
+#include "esp_bt_defs.h"
+#include "esp_gatt_common_api.h"
+#include "esp_gatts_api.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gap_bt_api.h"
 #include "esp_a2dp_api.h"
 #include "esp_avrc_api.h"
 
-#include "esp_gap_ble_api.h"
-#include "esp_gatts_api.h"
-#include "esp_bt_main.h"
-#include "esp_gatt_common_api.h"
-
 #include "dsp_ble.h"
+#include "SigmaStudioFiles/vol_ctrl1_PROJ_IC_1.h"
+#include "SigmaStudioFiles/SigmaStudioFW.h"
 
 #include <string.h>
 
 
+#define SDA_PIN 21
+#define SCL_PIN 22
+
 
 #define DSP_TABLE_TAG "DSP_BLE"
 
-
+/* event for handler "bt_av_hdl_stack_up */
+enum {
+    BT_APP_EVT_STACK_UP = 0,
+};
 
 #define PREPARE_BUF_MAX_SIZE        1024
 #define DSP_PROFILE_NUM                 1
@@ -208,6 +219,7 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
 			break;
 	}
 }
+uint8_t test_volume_level[1] = {0x00};
 
 //Gets the interface from the BT stack and puts it into the table.
 void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
@@ -231,6 +243,11 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 			//New level is reached with *param->write.value;
 			//	printf("New volume level: %d\n", *param->write.value);
 
+			process_coefficient_for_i2c(3.47, test_volume_level);
+			printf("New 0: %X", test_volume_level[0]);
+	//		printf("New 1: %X", test_volume_level[1]);
+	//		printf("New 2: %X", test_volume_level[2]);
+//			printf("New 3: %X", test_volume_level[3]);
 			break;
 		case ESP_GATTS_EXEC_WRITE_EVT:
 			break;
@@ -288,6 +305,45 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 }
 
+
+
+static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
+{
+    ESP_LOGD(DSP_TABLE_TAG, "%s evt %d", __func__, event);
+    switch (event) {
+    case BT_APP_EVT_STACK_UP: {
+        /* set up bt device name */
+        esp_bt_dev_set_device_name(DEVICE_NAME);
+
+        /* initialize AVRCP controller */
+        esp_avrc_ct_init();
+        esp_avrc_ct_register_callback(bt_app_rc_ct_cb);
+        /* initialize AVRCP target */
+        assert (esp_avrc_tg_init() == ESP_OK);
+        esp_avrc_tg_register_callback(bt_app_rc_tg_cb);
+
+        esp_avrc_rn_evt_cap_mask_t evt_set = {0};
+        esp_avrc_rn_evt_bit_mask_operation(ESP_AVRC_BIT_MASK_OP_SET, &evt_set, ESP_AVRC_RN_VOLUME_CHANGE);
+        assert(esp_avrc_tg_set_rn_evt_cap(&evt_set) == ESP_OK);
+
+        /* initialize A2DP sink */
+        esp_a2d_register_callback(&bt_app_a2d_cb);
+        esp_a2d_sink_register_data_callback(bt_app_a2d_data_cb);
+        esp_a2d_sink_init();
+
+        /* set discoverable and connectable mode, wait to be connected */
+        esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
+        break;
+    }
+    default:
+        ESP_LOGE(DSP_TABLE_TAG, "%s unhandled evt %d", __func__, event);
+        break;
+    }
+}
+
+
+
+
 void app_main(void)
 {
     esp_err_t ret;
@@ -299,6 +355,18 @@ void app_main(void)
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK( ret );
+
+	i2c_config_t conf;
+	conf.mode = I2C_MODE_MASTER;
+	conf.sda_io_num = SDA_PIN;
+	conf.scl_io_num = SCL_PIN;
+	conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+	conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+	conf.master.clk_speed = 100000;
+	i2c_param_config(I2C_NUM_0, &conf);
+
+	i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
+
     i2s_config_t i2s_config = {
    #ifdef CONFIG_A2DP_SINK_OUTPUT_INTERNAL_DAC
            .mode = I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN,
@@ -324,7 +392,7 @@ void app_main(void)
        i2s_pin_config_t pin_config = {
            .bck_io_num = 26,
            .ws_io_num = 25,
-           .data_out_num = 22,
+           .data_out_num = 27,
            .data_in_num = -1                                                       //Not used
        };
 
@@ -356,24 +424,9 @@ void app_main(void)
         return;
     }
 
-//    bt_app_task_start_up();
+    bt_app_task_start_up();
 
-    /* Bluetooth device name, connection mode and profile set up */
-    /* initialize AVRCP controller */
-    esp_avrc_ct_init();
-    esp_avrc_ct_register_callback(bt_app_rc_ct_cb);
-    /* initialize AVRCP target */
-    assert (esp_avrc_tg_init() == ESP_OK);
-    esp_avrc_tg_register_callback(bt_app_rc_tg_cb);
-
-    esp_avrc_rn_evt_cap_mask_t evt_set = {0};
-    esp_avrc_rn_evt_bit_mask_operation(ESP_AVRC_BIT_MASK_OP_SET, &evt_set, ESP_AVRC_RN_VOLUME_CHANGE);
-    assert(esp_avrc_tg_set_rn_evt_cap(&evt_set) == ESP_OK);
-
-    /* initialize A2DP sink */
-    esp_a2d_register_callback(&bt_app_a2d_cb);
-    esp_a2d_sink_register_data_callback(bt_app_a2d_data_cb);
-    esp_a2d_sink_init();
+    bt_app_work_dispatch(bt_av_hdl_stack_evt, BT_APP_EVT_STACK_UP, NULL, 0, NULL);
 
     esp_ble_gatts_register_callback(gatts_event_handler);
     printf("GATTS profile event handler added.\n");
@@ -381,6 +434,10 @@ void app_main(void)
     printf("GAP profile event handler added.\n");
     esp_ble_gatts_app_register(DSP_APP_ID);
     esp_ble_gatt_set_local_mtu(500);
+
+    default_download_IC_1();
+
+
 
 }
 
