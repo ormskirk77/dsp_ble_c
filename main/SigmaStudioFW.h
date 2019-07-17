@@ -71,6 +71,11 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
       // mask and send lower address byte
 		i2c_master_write_byte(cmd, LO(address), true);
 
+	// Add extra dummy bit if this call is a safe load procedure.
+		if(address==0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814) {
+			i2c_master_write_byte(cmd, 0x00, true);
+		}
+
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
@@ -102,114 +107,73 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 //#define SIGMA_READ_REGISTER( devAddress, address, length, pData ) {/*TODO: implement macro or define as function*/}
 
 void SIGMA_READ_REGISTER(int devAddress, int address, int length, ADI_REG_TYPE *pData ){
-	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-//	Start condition,
-	i2c_master_start(cmd);
-//	Chip address with R/W = 0 which is a write command
-	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_WRITE, true);
-
-  // mask,shift by one byte, and send upper address byte
-	i2c_master_write_byte(cmd, HI(address), true);
-
-  // mask and send lower address byte
-	i2c_master_write_byte(cmd, LO(address), true);
-
-//	Repeat the start condition
-	i2c_master_start(cmd);
-//	Send chip address with R/W = 1 which is a read command
-	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_READ, true);
-//	1701 will ACK
-
-//	Send clocks and 1701 will output data
-	for(int i=0 ; i<length ; i++){
-		i2c_master_read_byte(cmd, *pData, true);
-		pData++;
-	}
-
-//	Master will send an ACK but the 1701 will ignore this ACK since there is nothing it can do about it should it not arrive.
-
-//	If you send another set of clocks then it will increment the address and send out another byte.
-
-//	Master will ACK
-
-//	this will continue until a stop condition is sent by the master.
+//	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+////	Start condition,
+//	i2c_master_start(cmd);
+////	Chip address with R/W = 0 which is a write command
+//	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_WRITE, true);
+//
+//  // mask,shift by one byte, and send upper address byte
+//	i2c_master_write_byte(cmd, HI(address), true);
+//
+//  // mask and send lower address byte
+//	i2c_master_write_byte(cmd, LO(address), true);
+//
+////	Repeat the start condition
+//	i2c_master_start(cmd);
+////	Send chip address with R/W = 1 which is a read command
+//	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_READ, true);
+////	1701 will ACK
+//
+////	Send clocks and 1701 will output data
+//	for(int i=0 ; i<length ; i++){
+//		i2c_master_read_byte(cmd, *pData, true);
+//		pData++;
+//	}
+//
+////	Master will send an ACK but the 1701 will ignore this ACK since there is nothing it can do about it should it not arrive.
+//
+////	If you send another set of clocks then it will increment the address and send out another byte.
+//
+////	Master will ACK
+//
+////	this will continue until a stop condition is sent by the master.
 }
 
 
-//void process_coefficient_for_i2c(float input_decimal, int num_of_bytes, unsigned char coefficients_as_bytes[]){
-//
-//	unsigned int input_hex = FIXPOINT_CONVERT(input_decimal);
-//	printf("input_decimal: %f\n", input_decimal);
-//	printf("input_hex: %X\n", input_hex);
-//
-//	char* hexPtr = &input_hex;
-//
-//	for(int i=0 ; i<num_of_bytes ; i++){
-//
-//	}
-//
-//	unsigned char value8_pt1=0;
-//	unsigned char value8_pt2=0;
-//	unsigned char value8_pt3=0;
-//	unsigned char value8_pt4=0;
-//
-//	coefficients_as_bytes[0] = *hexPtr;
-//	hexPtr++;
-//
-//	coefficients_as_bytes[1] = *hexPtr;
-//	hexPtr++;
-//
-//	coefficients_as_bytes[2] = *hexPtr;
-//	hexPtr++;
-//
-//	coefficients_as_bytes[3] = *hexPtr;
-//	hexPtr++;
-//
-//}
 
 void process_coefficient_for_i2c(float input_decimal, unsigned char coefficients_as_bytes[]){
 
-	unsigned int input_hex = FIXPOINT_CONVERT(input_decimal);
-	printf("input_decimal: %f\n", input_decimal);
-	printf("input_hex: %X\n", input_hex);
 
-	char* hexPtr = &input_hex;
+	unsigned int fixed_point_num = FIXPOINT_CONVERT(input_decimal);
 
-	unsigned char value8_pt1=0;
-	unsigned char value8_pt2=0;
-	unsigned char value8_pt3=0;
-	unsigned char value8_pt4=0;
 
-	coefficients_as_bytes[0] = *hexPtr;
-	hexPtr++;
+	coefficients_as_bytes[0] = (fixed_point_num >> 24) & 0xFF;
+	coefficients_as_bytes[1] = (fixed_point_num >> 16) & 0xFF;
+	coefficients_as_bytes[2] = (fixed_point_num >> 8) & 0xFF;
+	coefficients_as_bytes[3] = fixed_point_num & 0xFF;
 
-	coefficients_as_bytes[1] = *hexPtr;
-	hexPtr++;
-
-	coefficients_as_bytes[2] = *hexPtr;
-	hexPtr++;
-
-	coefficients_as_bytes[3] = *hexPtr;
-	hexPtr++;
 
 }
 
 
 
-void SIGMA_SAFELOAD_SINGLE(int device_address, unsigned char paramData[]){
+void SIGMA_SAFELOAD_SINGLE(int device_address, ADI_REG_TYPE *paramData){
 //	Step 1: write parameter data to one of the safeload data registers: 2064 (0x0810) - 28bit
 	//write the new parameter data that you want to be uploaded into the parameter RAM to the safeload data register.
 //This step includes the safeload data register address AND the data byte 3 is a dummy byte. 08 10 00 00 80 00 00
-	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081000, 4, paramData);
+
+	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0810, 4, paramData);
 
 	//	Step 2: write parameter address to one of the safeload address registers 2069 (0x0815) . Address of the parameter to be written - 10bit
 	//volume address is 0x00. Write the parameter memory location to the safeload address location. 08 15 00 00
-	char* safe_load_address[] = {0x00, 0x00};
+	ADI_REG_TYPE safe_load_address[2] = {0x00, 0x14};
 	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0815, 2, safe_load_address);
 
 //	Step 3: the IST bit is set
 //	0x08 0x1C 0x00 0x3C
-	char* safe_load_IST_flip[] = {0x00, 0x3C};
+
+	ADI_REG_TYPE safe_load_IST_flip[2] = {0x00, 0x3C};
 	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081C, 2, safe_load_IST_flip);
 }
 
@@ -231,7 +195,7 @@ void SIGMA_SAFELOAD_SINGLE(int device_address, unsigned char paramData[]){
  *    This optional macro is intended for systems having special implementation
  *    requirements (for example: limited memory size or endianness)
  */
-#define SIGMASTUDIOTYPE_FIXPOINT_CONVERT( _value ) {/*TODO: IMPLEMENT MACRO*/}
+#define SIGMASTUDIOTYPE_FIXPOINT_CONVERT( _value ) {FIXPOINT_CONVERT(_value);}
 
 /* 
  * Convert integer data to system compatible format

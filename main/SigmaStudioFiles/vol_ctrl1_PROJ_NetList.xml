@@ -17,21 +17,51 @@
 <NetList>
     <IC name=" IC 1 " type="DSPSigma100">
         <Schematic>
-            <Algorithm name="ICSigma100In1" friendlyname="170x\140x input" cell="Input1 ">
-                <Link pin="O_C0_A0_P1_out" dir="out" link="Link0" />
-                <Link pin="O_C0_A0_P2_out" dir="out" link="Link1" />
+            <Algorithm name="ICSigma100In1" friendlyname="170x\140x input" cell="Input ">
+                <Link pin="O_C0_A0_P1_out" dir="out" link="Link11" />
+                <Link pin="O_C0_A0_P2_out" dir="out" link="Link10" />
+                <Link pin="O_C0_A0_P3_out" dir="out" link="Link9" />
+                <Link pin="O_C0_A0_P4_out" dir="out" link="Link8" />
+                <Link pin="O_C0_A0_P5_out" dir="out" link="Link7" />
+                <Link pin="O_C0_A0_P6_out" dir="out" link="Link5" />
+                <Link pin="O_C0_A0_P7_out" dir="out" link="Link4" />
+                <Link pin="O_C0_A0_P8_out" dir="out" link="Link3" />
+                <Link pin="O_C0_A0_P9_out" dir="out" link="Link2" />
+                <Link pin="O_C0_A0_P10_out" dir="out" link="Link6" />
             </Algorithm>
-            <Algorithm name="SWGain1940DBAlg1" friendlyname="Gain (RC Slew)" cell="SW vol 1 ">
-                <Link pin="I_C11_A0_P1_in" dir="in" link="Link0" />
-                <Link pin="I_C11_A0_P3_in" dir="in" link="Link1" />
-                <Link pin="O_C11_A0_P2_out" dir="out" link="Link2" />
-                <Link pin="O_C11_A0_P4_out" dir="out" link="Link3" />
+            <Algorithm name="NxNMixer1940Alg1" friendlyname="NxM Ctrl Mixer" cell="mixer ">
+                <Link pin="I_C78_A0_P2_in" dir="in" link="Link11" />
+                <Link pin="I_C78_A0_P3_in" dir="in" link="Link10" />
+                <Link pin="I_C78_A0_P4_in" dir="in" link="Link9" />
+                <Link pin="I_C78_A0_P5_in" dir="in" link="Link8" />
+                <Link pin="I_C78_A0_P6_in" dir="in" link="Link7" />
+                <Link pin="I_C78_A0_P7_in" dir="in" link="Link5" />
+                <Link pin="I_C78_A0_P8_in" dir="in" link="Link4" />
+                <Link pin="I_C78_A0_P9_in" dir="in" link="Link3" />
+                <Link pin="I_C78_A0_P10_in" dir="in" link="Link2" />
+                <Link pin="I_C78_A0_P11_in" dir="in" link="Link6" />
+                <Link pin="O_C78_A0_P1_out" dir="out" link="Link14" />
+                <Link pin="O_C78_A0_P12_out" dir="out" link="Link12" />
             </Algorithm>
-            <Algorithm name="ICSigma100Out1" friendlyname="170x\140x output" cell="Output1 ">
-                <Link pin="I_C20_A0_P1_in" dir="in" link="Link2" />
+            <Algorithm name="EQ1940Single2" friendlyname="1 Channel - Double Precision" cell="right_biquad ">
+                <Link pin="I_C121_A0_P1_in" dir="in" link="Link12" />
+                <Link pin="O_C121_A0_P2_out" dir="out" link="Link13" />
             </Algorithm>
-            <Algorithm name="ICSigma100Out2" friendlyname="170x\140x output" cell="Output2 ">
-                <Link pin="I_C22_A0_P1_in" dir="in" link="Link3" />
+            <Algorithm name="EQ1940Single1" friendlyname="1 Channel - Double Precision" cell="left_biquad ">
+                <Link pin="I_C118_A0_P1_in" dir="in" link="Link14" />
+                <Link pin="O_C118_A0_P2_out" dir="out" link="Link15" />
+            </Algorithm>
+            <Algorithm name="SWGain1940DBAlg1" friendlyname="Gain (RC Slew)" cell="MAIN_V ">
+                <Link pin="I_C11_A0_P1_in" dir="in" link="Link15" />
+                <Link pin="I_C11_A0_P3_in" dir="in" link="Link13" />
+                <Link pin="O_C11_A0_P2_out" dir="out" link="Link0" />
+                <Link pin="O_C11_A0_P4_out" dir="out" link="Link1" />
+            </Algorithm>
+            <Algorithm name="ICSigma100Out1" friendlyname="170x\140x output" cell="left_output ">
+                <Link pin="I_C20_A0_P1_in" dir="in" link="Link0" />
+            </Algorithm>
+            <Algorithm name="ICSigma100Out2" friendlyname="170x\140x output" cell="right_output ">
+                <Link pin="I_C22_A0_P1_in" dir="in" link="Link1" />
             </Algorithm>
         </Schematic>
     </IC>

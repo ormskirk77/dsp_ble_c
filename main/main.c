@@ -23,7 +23,7 @@
 
 #include "dsp_ble.h"
 #include "SigmaStudioFiles/vol_ctrl1_PROJ_IC_1.h"
-#include "SigmaStudioFiles/SigmaStudioFW.h"
+#include "SigmaStudioFW.h"
 
 #include <string.h>
 
@@ -130,7 +130,7 @@ struct gatts_profile_inst {
 static const uint16_t GATTS_SERVICE_UUID_TEST      = 0x00FF;
 static const uint16_t GATTS_CHAR_UUID_TEST_A       = 0xFF01;
 static const uint16_t primary_service_uuid         = ESP_GATT_UUID_PRI_SERVICE;
-static const uint8_t DSP_VOLUME_LEVEL[1] = {0x11};
+ADI_REG_TYPE DSP_VOLUME_LEVEL[4] = {0x00, 0x0C, 0xCC, 0xCD};
 static const uint16_t character_declaration_uuid = ESP_GATT_UUID_CHAR_DECLARE;
 static const uint8_t char_prop_read_write = ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE;
 
@@ -219,7 +219,6 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
 			break;
 	}
 }
-uint8_t test_volume_level[1] = {0x00};
 
 //Gets the interface from the BT stack and puts it into the table.
 void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
@@ -242,12 +241,16 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		case ESP_GATTS_WRITE_EVT:
 			//New level is reached with *param->write.value;
 			//	printf("New volume level: %d\n", *param->write.value);
+			{float newVol = *param->write.value;
+			newVol = newVol/100;
 
-			process_coefficient_for_i2c(3.47, test_volume_level);
-			printf("New 0: %X", test_volume_level[0]);
-	//		printf("New 1: %X", test_volume_level[1]);
-	//		printf("New 2: %X", test_volume_level[2]);
-//			printf("New 3: %X", test_volume_level[3]);
+			process_coefficient_for_i2c(newVol, DSP_VOLUME_LEVEL);
+			printf("New 0: %X  ||  ", DSP_VOLUME_LEVEL[0]);
+			printf("New 1: %X  ||  ", DSP_VOLUME_LEVEL[1]);
+			printf("New 2: %X  ||  ", DSP_VOLUME_LEVEL[2]);
+			printf("New 3: %X  ||  \n", DSP_VOLUME_LEVEL[3]);
+			SIGMA_SAFELOAD_SINGLE(0x34, DSP_VOLUME_LEVEL);
+			}
 			break;
 		case ESP_GATTS_EXEC_WRITE_EVT:
 			break;
@@ -356,6 +359,8 @@ void app_main(void)
     }
     ESP_ERROR_CHECK( ret );
 
+
+
 	i2c_config_t conf;
 	conf.mode = I2C_MODE_MASTER;
 	conf.sda_io_num = SDA_PIN;
@@ -366,6 +371,8 @@ void app_main(void)
 	i2c_param_config(I2C_NUM_0, &conf);
 
 	i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
+
+
 
     i2s_config_t i2s_config = {
    #ifdef CONFIG_A2DP_SINK_OUTPUT_INTERNAL_DAC
@@ -437,7 +444,7 @@ void app_main(void)
 
     default_download_IC_1();
 
-
+ //   SIGMA_SAFELOAD_SINGLE(0, DSP_VOLUME_LEVEL);
 
 }
 
