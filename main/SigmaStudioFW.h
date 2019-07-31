@@ -78,16 +78,20 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 		//|| 0x0811 || 0x0812 || 0x0813 || 0x0814
 		if(address==0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814) {
 			i2c_master_write_byte(cmd, 0x00, true);
-			printf(" 00 " );
+//			printf(" 00 " );
+		}
+		if(address==0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814) {
+			i2c_master_write_byte(cmd, 0x00, true);
+//			printf(" 00 " );
 		}
 
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-			printf(" %X", *pData);
+	//		printf(" %X", *pData);
 			pData++;
 		}
-		printf("\n");
+//		printf("\n");
 	  // Send ACK bit on I2C bus
 
       // STOP I2C
@@ -97,7 +101,7 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 		i2c_cmd_link_delete(cmd);
 
 		  if (ret == ESP_FAIL) {
-//		     printf("ESP_I2C_WRITE ERROR : %d\n",ret);
+		     printf("ESP_I2C_WRITE ERROR : %d\n",ret);
 		  } else {
 			  printf("ESP32 I2C worked with return: %X\n", ret);
 		  }

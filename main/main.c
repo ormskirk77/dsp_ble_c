@@ -1,4 +1,8 @@
- #include "freertos/FreeRTOS.h"
+/*
+ * THIS IS COPY_1
+ */
+
+#include "freertos/FreeRTOS.h"
  #include "freertos/task.h"
  #include "freertos/event_groups.h"
  #include "esp_system.h"
@@ -440,6 +444,8 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
 
 void app_main(void)
 {
+
+	printf("Start message...................\n\n");
     esp_err_t ret;
 
     // Initialize NVS.
@@ -471,7 +477,7 @@ void app_main(void)
    #else
            .mode = I2S_MODE_MASTER | I2S_MODE_TX,                                  // Only TX
    #endif
-           .sample_rate = 44100,
+           .sample_rate = 48000,
            .bits_per_sample = 16,
            .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,                           //2-channels
            .communication_format = I2S_COMM_FORMAT_I2S_MSB,
