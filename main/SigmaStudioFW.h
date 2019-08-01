@@ -68,27 +68,24 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 
       // mask,shift by one byte, and send upper address byte
 		i2c_master_write_byte(cmd, HI(address), true);
-		printf("CMD: %X", HI(address));
+//		printf("CMD: %X", HI(address));
 
       // mask and send lower address byte
 		i2c_master_write_byte(cmd, LO(address), true);
-		printf(" %X", LO(address));
+//		printf(" %X\n", LO(address));
 
 	// Add extra dummy bit if this call is a safe load procedure.
 		//|| 0x0811 || 0x0812 || 0x0813 || 0x0814
-		if(address==0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814) {
+		if(address==0x0810 || address==0x0811 || address==0x0812 || address==0x0813 || address==0x0814) {
 			i2c_master_write_byte(cmd, 0x00, true);
 //			printf(" 00 " );
 		}
-		if(address==0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814) {
-			i2c_master_write_byte(cmd, 0x00, true);
-//			printf(" 00 " );
-		}
+
 
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-	//		printf(" %X", *pData);
+			printf(" %X", *pData);
 			pData++;
 		}
 //		printf("\n");
@@ -116,39 +113,9 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
  */
 //#define SIGMA_READ_REGISTER( devAddress, address, length, pData ) {/*TODO: implement macro or define as function*/}
 
-void SIGMA_READ_REGISTER(int devAddress, int address, int length, ADI_REG_TYPE *pData ){
-//	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-////	Start condition,
-//	i2c_master_start(cmd);
-////	Chip address with R/W = 0 which is a write command
-//	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_WRITE, true);
+//void SIGMA_READ_REGISTER(int devAddress, int address, int length, ADI_REG_TYPE *pData ){
 //
-//  // mask,shift by one byte, and send upper address byte
-//	i2c_master_write_byte(cmd, HI(address), true);
-//
-//  // mask and send lower address byte
-//	i2c_master_write_byte(cmd, LO(address), true);
-//
-////	Repeat the start condition
-//	i2c_master_start(cmd);
-////	Send chip address with R/W = 1 which is a read command
-//	i2c_master_write_byte(cmd, (devAddress << 1) | I2C_MASTER_READ, true);
-////	1701 will ACK
-//
-////	Send clocks and 1701 will output data
-//	for(int i=0 ; i<length ; i++){
-//		i2c_master_read_byte(cmd, *pData, true);
-//		pData++;
-//	}
-//
-////	Master will send an ACK but the 1701 will ignore this ACK since there is nothing it can do about it should it not arrive.
-//
-////	If you send another set of clocks then it will increment the address and send out another byte.
-//
-////	Master will ACK
-//
-////	this will continue until a stop condition is sent by the master.
-}
+//}
 
 
 

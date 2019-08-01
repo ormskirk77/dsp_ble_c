@@ -69,6 +69,13 @@ enum {
 uint16_t dsp_control_handle_table[NUM_TABLE_ELEMENTS];
 
 
+void basic_dsp_hardware_check(){
+	ADI_REG_TYPE unmuteData[2] = {0x00, 0x1C};
+
+	SIGMA_WRITE_REGISTER_BLOCK(0x34, 0x081C, 2, unmuteData);
+}
+
+
 
 
 //==============================================   SET ADVERTISING DATA   =======================================================
@@ -294,6 +301,9 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
                   param->update_conn_params.latency,
                   param->update_conn_params.timeout);
 			break;
+		case ESP_BT_GAP_PIN_REQ_EVT:
+				printf("PIN REQUIRED\n");
+			break;
 		default :
 			break;
 	}
@@ -405,6 +415,8 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 
 
+
+
 static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
 {
     ESP_LOGD(DSP_TABLE_TAG, "%s evt %d", __func__, event);
@@ -445,7 +457,7 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
 void app_main(void)
 {
 
-	printf("Start message...................\n\n");
+
     esp_err_t ret;
 
     // Initialize NVS.
@@ -539,9 +551,11 @@ void app_main(void)
     esp_ble_gatts_app_register(DSP_APP_ID);
     esp_ble_gatt_set_local_mtu(500);
 
-    default_download_IC_1();
 
- //   SIGMA_SAFELOAD_SINGLE(0, DSP_VOLUME_LEVEL);
+
+
+    default_download_IC_1();
+    basic_dsp_hardware_check();
 
 }
 
