@@ -1,8 +1,8 @@
 /*
- * File:           C:\Users\chesham\Documents\DSP\vol_ctrl1\vol_ctrl1_PROJ_IC_1_REG.h
+ * File:           C:\Users\chesham\Documents\DSP\basic\Design 1_IC_1_REG.h
  *
- * Created:        Wednesday, July 17, 2019 2:01:53 PM
- * Description:    vol_ctrl1_PROJ:IC 1 control register definitions.
+ * Created:        Wednesday, July 31, 2019 8:12:29 PM
+ * Description:    Design 1:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
  * but is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -16,8 +16,8 @@
  *
  * Copyright ©2019 Analog Devices, Inc. All rights reserved.
  */
-#ifndef __VOL_CTRL1_PROJ_IC_1_REG_H__
-#define __VOL_CTRL1_PROJ_IC_1_REG_H__
+#ifndef __DESIGN_1_IC_1_REG_H__
+#define __DESIGN_1_IC_1_REG_H__
 
 
 /* InterfaceRegister0  - Registers (IC 1) */
@@ -108,12 +108,12 @@
 /* MpCfg0  - Registers (IC 1) */
 #define REG_MPCFG0_IC_1_ADDR                      0x820
 #define REG_MPCFG0_IC_1_BYTE                      3
-#define REG_MPCFG0_IC_1_VALUE                     0x444444
+#define REG_MPCFG0_IC_1_VALUE                     0x0
 
 /* MpCfg1  - Registers (IC 1) */
 #define REG_MPCFG1_IC_1_ADDR                      0x821
 #define REG_MPCFG1_IC_1_BYTE                      3
-#define REG_MPCFG1_IC_1_VALUE                     0x444444
+#define REG_MPCFG1_IC_1_VALUE                     0x0
 
 /* AnalogPowerDownRegister  - Registers (IC 1) */
 #define REG_ANALOGPOWERDOWNREGISTER_IC_1_ADDR     0x822
@@ -331,17 +331,17 @@
 #define R16_LRCLK_POLARITY_IC_1_SHIFT             4
 
 /* MpCfg0 (IC 1) */
-#define R17_MFSELECT0_IC_1                        0x4    /* 100b	[2:0] */
+#define R17_MFSELECT0_IC_1                        0x0    /* 000b	[2:0] */
 #define R17_MFINVERT0_IC_1                        0x0    /* 0b	[3] */
-#define R17_MFSELECT1_IC_1                        0x4    /* 100b	[6:4] */
+#define R17_MFSELECT1_IC_1                        0x0    /* 000b	[6:4] */
 #define R17_MFINVERT1_IC_1                        0x0    /* 0b	[7] */
-#define R17_MFSELECT2_IC_1                        0x4    /* 100b	[10:8] */
+#define R17_MFSELECT2_IC_1                        0x0    /* 000b	[10:8] */
 #define R17_MFINVERT2_IC_1                        0x0    /* 0b	[11] */
-#define R17_MFSELECT3_IC_1                        0x4    /* 100b	[14:12] */
+#define R17_MFSELECT3_IC_1                        0x0    /* 000b	[14:12] */
 #define R17_MFINVERT3_IC_1                        0x0    /* 0b	[15] */
-#define R17_MFSELECT4_IC_1                        0x4    /* 100b	[18:16] */
+#define R17_MFSELECT4_IC_1                        0x0    /* 000b	[18:16] */
 #define R17_MFINVERT4_IC_1                        0x0    /* 0b	[19] */
-#define R17_MFSELECT5_IC_1                        0x4    /* 100b	[22:20] */
+#define R17_MFSELECT5_IC_1                        0x0    /* 000b	[22:20] */
 #define R17_MFINVERT5_IC_1                        0x0    /* 0b	[23] */
 #define R17_MFSELECT0_IC_1_MASK                   0x7
 #define R17_MFSELECT0_IC_1_SHIFT                  0
@@ -369,17 +369,17 @@
 #define R17_MFINVERT5_IC_1_SHIFT                  23
 
 /* MpCfg1 (IC 1) */
-#define R18_MFSELECT6_IC_1                        0x4    /* 100b	[2:0] */
+#define R18_MFSELECT6_IC_1                        0x0    /* 000b	[2:0] */
 #define R18_MFINVERT6_IC_1                        0x0    /* 0b	[3] */
-#define R18_MFSELECT7_IC_1                        0x4    /* 100b	[6:4] */
+#define R18_MFSELECT7_IC_1                        0x0    /* 000b	[6:4] */
 #define R18_MFINVERT7_IC_1                        0x0    /* 0b	[7] */
-#define R18_MFSELECT8_IC_1                        0x4    /* 100b	[10:8] */
+#define R18_MFSELECT8_IC_1                        0x0    /* 000b	[10:8] */
 #define R18_MFINVERT8_IC_1                        0x0    /* 0b	[11] */
-#define R18_MFSELECT9_IC_1                        0x4    /* 100b	[14:12] */
+#define R18_MFSELECT9_IC_1                        0x0    /* 000b	[14:12] */
 #define R18_MFINVERT9_IC_1                        0x0    /* 0b	[15] */
-#define R18_MFSELECT10_IC_1                       0x4    /* 100b	[18:16] */
+#define R18_MFSELECT10_IC_1                       0x0    /* 000b	[18:16] */
 #define R18_MFINVERT10_IC_1                       0x0    /* 0b	[19] */
-#define R18_MFSELECT11_IC_1                       0x4    /* 100b	[22:20] */
+#define R18_MFSELECT11_IC_1                       0x0    /* 000b	[22:20] */
 #define R18_MFINVERT11_IC_1                       0x0    /* 0b	[23] */
 #define R18_MFSELECT6_IC_1_MASK                   0x7
 #define R18_MFSELECT6_IC_1_SHIFT                  0

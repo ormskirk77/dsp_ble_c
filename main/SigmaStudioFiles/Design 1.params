@@ -1,22 +1,4 @@
-Cell Name         = MAIN_V
-Parameter Name    = SWGain1940DBAlg1target
-Parameter Address = 30
-Parameter Value   = 0.630957365036011
-Parameter Data :
-0x00 ,	0x50 ,	0xC3 ,	0x36 ,	
-
-
-
-Cell Name         = MAIN_V
-Parameter Name    = SWGain1940DBAlg1step
-Parameter Address = 31
-Parameter Value   = 0.000244140625
-Parameter Data :
-0x00 ,	0x00 ,	0x08 ,	0x00 ,	
-
-
-
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_00
 Parameter Address = 0
 Parameter Value   = 1
@@ -25,7 +7,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_01
 Parameter Address = 1
 Parameter Value   = 1
@@ -34,7 +16,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_02
 Parameter Address = 2
 Parameter Value   = 1
@@ -43,7 +25,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_03
 Parameter Address = 3
 Parameter Value   = 1
@@ -52,7 +34,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_04
 Parameter Address = 4
 Parameter Value   = 1
@@ -61,7 +43,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_05
 Parameter Address = 5
 Parameter Value   = 1
@@ -70,7 +52,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_06
 Parameter Address = 6
 Parameter Value   = 1
@@ -79,7 +61,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_07
 Parameter Address = 7
 Parameter Value   = 1
@@ -88,7 +70,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_08
 Parameter Address = 8
 Parameter Value   = 1
@@ -97,7 +79,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_00_09
 Parameter Address = 9
 Parameter Value   = 1
@@ -106,7 +88,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_00
 Parameter Address = 10
 Parameter Value   = 1
@@ -115,7 +97,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_01
 Parameter Address = 11
 Parameter Value   = 1
@@ -124,7 +106,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_02
 Parameter Address = 12
 Parameter Value   = 1
@@ -133,7 +115,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_03
 Parameter Address = 13
 Parameter Value   = 1
@@ -142,7 +124,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_04
 Parameter Address = 14
 Parameter Value   = 1
@@ -151,7 +133,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_05
 Parameter Address = 15
 Parameter Value   = 1
@@ -160,7 +142,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_06
 Parameter Address = 16
 Parameter Value   = 1
@@ -169,7 +151,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_07
 Parameter Address = 17
 Parameter Value   = 1
@@ -178,7 +160,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_08
 Parameter Address = 18
 Parameter Value   = 1
@@ -187,7 +169,7 @@ Parameter Data :
 
 
 
-Cell Name         = mixer
+Cell Name         = NxM Mixer1
 Parameter Name    = NxNMixer1940Alg1_01_09
 Parameter Address = 19
 Parameter Value   = 1
@@ -196,98 +178,26 @@ Parameter Data :
 
 
 
-Cell Name         = left_biquad
-Parameter Name    = EQ1940Single10B1
-Parameter Address = 25
-Parameter Value   = 1
-Parameter Data :
-0x00 ,	0x80 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = left_biquad
-Parameter Name    = EQ1940Single11B1
-Parameter Address = 26
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = left_biquad
-Parameter Name    = EQ1940Single12B1
-Parameter Address = 27
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = left_biquad
-Parameter Name    = EQ1940Single11A1
-Parameter Address = 28
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = left_biquad
-Parameter Name    = EQ1940Single12A1
-Parameter Address = 29
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = right_biquad
-Parameter Name    = EQ1940Single20B1
+Cell Name         = Single 1
+Parameter Name    = Gain1940AlgNS1
 Parameter Address = 20
 Parameter Value   = 1
 Parameter Data :
-0x00 ,	0x80 ,	0x00 ,	0x00 ,	
+0x00, 0x80, 0x00, 0x00, 
 
 
 
-Cell Name         = right_biquad
-Parameter Name    = EQ1940Single21B1
+Cell Name         = Single 1
+Parameter Name    = Gain1940AlgNS2
 Parameter Address = 21
-Parameter Value   = 0
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = right_biquad
-Parameter Name    = EQ1940Single22B1
-Parameter Address = 22
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = right_biquad
-Parameter Name    = EQ1940Single21A1
-Parameter Address = 23
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
-
-
-
-Cell Name         = right_biquad
-Parameter Name    = EQ1940Single22A1
-Parameter Address = 24
-Parameter Value   = 0
-Parameter Data :
-0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+0x00, 0x80, 0x00, 0x00, 
 
 
 
 Parameter data for: IC 1 (Hexadecimal format starting at parameter address 0)
-See also vol_ctrl1_PROJ.hex file
+See also Design 1.hex file
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
@@ -309,17 +219,17 @@ See also vol_ctrl1_PROJ.hex file
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
-0x00 , 	0x00 , 	0x00 , 	0x00 , 	
-0x00 , 	0x00 , 	0x00 , 	0x00 , 	
-0x00 , 	0x00 , 	0x00 , 	0x00 , 	
-0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x80 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
-0x00 , 	0x50 , 	0xC3 , 	0x36 , 	
-0x00 , 	0x00 , 	0x08 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
+0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
 0x00 , 	0x00 , 	0x00 , 	0x00 , 	
@@ -1335,17 +1245,17 @@ Parameter data for: IC 1 (Binary format starting at parameter address 0)
 00000000	10000000	00000000	00000000	
 00000000	10000000	00000000	00000000	
 00000000	10000000	00000000	00000000	
-00000000	00000000	00000000	00000000	
-00000000	00000000	00000000	00000000	
-00000000	00000000	00000000	00000000	
-00000000	00000000	00000000	00000000	
 00000000	10000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
-00000000	01010000	11000011	00110110	
-00000000	00000000	00001000	00000000	
+00000000	00000000	00000000	00000000	
+00000000	00000000	00000000	00000000	
+00000000	00000000	00000000	00000000	
+00000000	00000000	00000000	00000000	
+00000000	00000000	00000000	00000000	
+00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
 00000000	00000000	00000000	00000000	
