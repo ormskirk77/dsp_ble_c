@@ -85,7 +85,7 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-			printf(" %X", *pData);
+//			printf(" %X", *pData);
 			pData++;
 		}
 //		printf("\n");
@@ -108,15 +108,6 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 
 
 
-/*
- * Read device registers 
- */
-//#define SIGMA_READ_REGISTER( devAddress, address, length, pData ) {/*TODO: implement macro or define as function*/}
-
-//void SIGMA_READ_REGISTER(int devAddress, int address, int length, ADI_REG_TYPE *pData ){
-//
-//}
-
 
 
 void process_coefficient_for_i2c(float input_decimal, unsigned char coefficients_as_bytes[]){
@@ -129,8 +120,6 @@ void process_coefficient_for_i2c(float input_decimal, unsigned char coefficients
 	coefficients_as_bytes[1] = (fixed_point_num >> 16) & 0xFF;
 	coefficients_as_bytes[2] = (fixed_point_num >> 8) & 0xFF;
 	coefficients_as_bytes[3] = fixed_point_num & 0xFF;
-
-
 }
 
 
@@ -156,11 +145,6 @@ void SIGMA_SAFELOAD_SINGLE(int device_address, char param_address, ADI_REG_TYPE 
 
 void SIGMA_SAFELOAD_BIQUAD(int device_address, char param_address, float *paramData){
 
-
-//0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814
-	//Addresses change for the different biquads left or right:
-
-
 		ADI_REG_TYPE temp[4] = {0x00, 0x00, 0x00, 0x00};
 
 		process_coefficient_for_i2c(*paramData, temp);
@@ -171,7 +155,6 @@ void SIGMA_SAFELOAD_BIQUAD(int device_address, char param_address, float *paramD
 
 		process_coefficient_for_i2c(*paramData, temp);
 		SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0811, 4, temp);
-	//	param_address = param_address+1;
 		safe_load_address[0] = param_address + 1;
 		SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0816, 1, safe_load_address);
 		paramData++;
