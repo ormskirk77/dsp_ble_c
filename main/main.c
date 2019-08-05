@@ -69,11 +69,7 @@ enum {
 uint16_t dsp_control_handle_table[NUM_TABLE_ELEMENTS];
 
 
-void basic_dsp_hardware_check(){
-	ADI_REG_TYPE unmuteData[2] = {0x00, 0x1C};
 
-	SIGMA_WRITE_REGISTER_BLOCK(0x34, 0x081C, 2, unmuteData);
-}
 
 
 
@@ -555,7 +551,6 @@ void app_main(void)
 
 
     default_download_IC_1();
-    basic_dsp_hardware_check();
 
 }
 
