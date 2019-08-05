@@ -26,9 +26,9 @@
 #include "esp_avrc_api.h"
 
 #include "dsp_ble.h"
-#include "SigmaStudioFiles/Design 1_IC_1.h"
+#include "SigmaStudioFiles/vol_ctrl1_PROJ_IC_1.h"
 #include "SigmaStudioFW.h"
-#include "coefficient_utils.h"
+#include "biquad_coefficient_utils.h"
 
 #include <string.h>
 
