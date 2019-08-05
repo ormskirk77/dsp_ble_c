@@ -15,6 +15,7 @@
 enum filter {
 	low_pass,
 	high_pass,
+	band_pass,
 
 };
 
