@@ -43,9 +43,15 @@
                 <Link pin="O_C73_A0_P1_out" dir="out" link="Link12" />
                 <Link pin="O_C73_A0_P4_out" dir="out" link="Link13" />
             </Algorithm>
+            <Algorithm name="EQ1940Dual1" friendlyname="2 Channel - Double Precision" cell="Gen Filter1 ">
+                <Link pin="I_C110_A0_P1_in" dir="in" link="Link12" />
+                <Link pin="I_C110_A0_P2_in" dir="in" link="Link13" />
+                <Link pin="O_C110_A0_P3_out" dir="out" link="Link14" />
+                <Link pin="O_C110_A0_P4_out" dir="out" link="Link15" />
+            </Algorithm>
             <Algorithm name="SWGain1940DBAlg1" friendlyname="Gain (RC Slew)" cell="SW vol 1 ">
-                <Link pin="I_C31_A0_P1_in" dir="in" link="Link12" />
-                <Link pin="I_C31_A0_P3_in" dir="in" link="Link13" />
+                <Link pin="I_C31_A0_P1_in" dir="in" link="Link14" />
+                <Link pin="I_C31_A0_P3_in" dir="in" link="Link15" />
                 <Link pin="O_C31_A0_P2_out" dir="out" link="Link0" />
                 <Link pin="O_C31_A0_P4_out" dir="out" link="Link1" />
             </Algorithm>

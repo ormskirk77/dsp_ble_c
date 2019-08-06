@@ -38,8 +38,8 @@
 
 
 #define DSP_TABLE_TAG 			"DSP_BLE"
-#define VOL_PARAM_ADDR			0x14
-#define BIQUAD_PARAM_BASE_ADDR	0x00
+#define VOL_PARAM_ADDR			0x19
+#define BIQUAD_PARAM_BASE_ADDR	0x14
 
 
 

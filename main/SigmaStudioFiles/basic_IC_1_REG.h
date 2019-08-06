@@ -1,7 +1,7 @@
 /*
- * File:           E:\sigma_files\basic\basic_IC_1_REG.h
+ * File:           E:\sigma_files\one_biquad\basic_IC_1_REG.h
  *
- * Created:        Tuesday, August 6, 2019 12:12:58 PM
+ * Created:        Tuesday, August 6, 2019 8:58:16 PM
  * Description:    :IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
