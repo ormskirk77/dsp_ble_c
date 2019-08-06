@@ -26,7 +26,7 @@
 #include "esp_avrc_api.h"
 
 #include "dsp_ble.h"
-#include "SigmaStudioFiles/vol_ctrl1_PROJ_IC_1.h"
+#include "SigmaStudioFiles/basic_IC_1.h"
 #include "SigmaStudioFW.h"
 #include "biquad_coefficient_utils.h"
 
@@ -38,13 +38,9 @@
 
 
 #define DSP_TABLE_TAG 			"DSP_BLE"
-#define VOL_PARAM_ADDR			0x19
-#define BIQUAD_PARAM_BASE_ADDR	0x14
-#define BIQUAD_PARAM_ADDR_B0	0x14
-#define BIQUAD_PARAM_ADDR_B1	0x15
-#define BIQUAD_PARAM_ADDR_B2	0x16
-#define BIQUAD_PARAM_ADDR_A1	0x17
-#define BIQUAD_PARAM_ADDR_A2	0x18
+#define VOL_PARAM_ADDR			0x05
+#define BIQUAD_PARAM_BASE_ADDR	0x00
+
 
 
 /* event for handler "bt_av_hdl_stack_up */
@@ -281,6 +277,7 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
 			esp_ble_gap_start_advertising(&adv_params);
 		break;
 		case ESP_GAP_BLE_ADV_START_COMPLETE_EVT:
+			printf("ESP_GAP_BLE_ADV_START_COMPLETE_EVT called.\n");
 			if(param->adv_data_cmpl.status != ESP_BT_STATUS_SUCCESS){
 				ESP_LOGE(DSP_TABLE_TAG, "Advertising start failed. \n");
 			}
@@ -296,9 +293,6 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
                   param->update_conn_params.conn_int,
                   param->update_conn_params.latency,
                   param->update_conn_params.timeout);
-			break;
-		case ESP_BT_GAP_PIN_REQ_EVT:
-				printf("PIN REQUIRED\n");
 			break;
 		default :
 			break;
@@ -361,17 +355,20 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 			break;
 		case ESP_GATTS_CONNECT_EVT:
 			printf("gatts_profile_event_handler: ");
-			printf("ESP_GATTS_CONNECT_EVT called.\n");
-            esp_log_buffer_hex(DSP_TABLE_TAG, param->connect.remote_bda, 6);
-            esp_ble_conn_update_params_t conn_params = {0};
-            memcpy(conn_params.bda, param->connect.remote_bda, sizeof(esp_bd_addr_t));
-            /* For the iOS system, please refer to Apple official documents about the BLE connection parameters restrictions. */
-            conn_params.latency = 0;
-            conn_params.max_int = 0x20;    // max_int = 0x20*1.25ms = 40ms
-            conn_params.min_int = 0x10;    // min_int = 0x10*1.25ms = 20ms
-            conn_params.timeout = 400;    // timeout = 400*10ms = 4000ms
-            //start sent the update connection parameters to the peer device.
-            esp_ble_gap_update_conn_params(&conn_params);
+					printf("ESP_GATTS_CONNECT_EVT called.\n");
+		            esp_log_buffer_hex(DSP_TABLE_TAG, param->connect.remote_bda, 6);
+		            esp_ble_conn_update_params_t conn_params = {0};
+		            memcpy(conn_params.bda, param->connect.remote_bda, sizeof(esp_bd_addr_t));
+		            /* For the iOS system, please refer to Apple official documents about the BLE connection parameters restrictions. */
+		            conn_params.latency = 0;
+		            conn_params.max_int = 0x20;    // max_int = 0x20*1.25ms = 40ms
+		            conn_params.min_int = 0x10;    // min_int = 0x10*1.25ms = 20ms
+		            conn_params.timeout = 400;    // timeout = 400*10ms = 4000ms
+		            //start sent the update connection parameters to the peer device.
+		            esp_ble_gap_update_conn_params(&conn_params);
+
+
+
 			break;
 		case ESP_GATTS_DISCONNECT_EVT:
 			printf("gatts_profile_event_handler: ");
@@ -418,6 +415,7 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
     ESP_LOGD(DSP_TABLE_TAG, "%s evt %d", __func__, event);
     switch (event) {
     case BT_APP_EVT_STACK_UP: {
+    	printf("APP EVENT STCK UP!!!\n");
         /* set up bt device name */
         esp_bt_dev_set_device_name(DEVICE_NAME);
 
@@ -541,7 +539,7 @@ void app_main(void)
     bt_app_work_dispatch(bt_av_hdl_stack_evt, BT_APP_EVT_STACK_UP, NULL, 0, NULL);
 
     esp_ble_gatts_register_callback(gatts_event_handler);
-    printf("GATTS profile event handler added.\n");
+    printf("GATTS profile event handler added..\n");
     esp_ble_gap_register_callback(gap_event_handler);
     printf("GAP profile event handler added.\n");
     esp_ble_gatts_app_register(DSP_APP_ID);
@@ -550,7 +548,8 @@ void app_main(void)
 
 
 
-    default_download_IC_1();
+
+//    default_download_IC_1();
 
 }
 

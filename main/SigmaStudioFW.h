@@ -85,7 +85,7 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-			printf(" %X", *pData);
+//			printf(" %X", *pData);
 			pData++;
 		}
 //		printf("\n");

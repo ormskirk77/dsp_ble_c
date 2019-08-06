@@ -38,11 +38,11 @@ float * calculate_coefficients(char filter, float gain, float Q, float cutFreq){
 		float b1 = 2*W/alpha;
 		float b2 = b0;
 
-		coefficient_array[0] = a1;
-		coefficient_array[1] = a2;
-		coefficient_array[2] = b0;
-		coefficient_array[3] = b1;
-		coefficient_array[4] = b2;
+		coefficient_array[0] = b0;
+		coefficient_array[1] = b1;
+		coefficient_array[2] = b2;
+		coefficient_array[3] = a1;
+		coefficient_array[4] = a2;
 
 
 		break;

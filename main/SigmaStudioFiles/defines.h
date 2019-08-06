@@ -1,8 +1,8 @@
 /*
  * File:           defines.h
  *
- * Created:        Wednesday, July 31, 2019 8:12:29 PM
- * Description:    Design 1 IC default download data definitions.
+ * Created:        Tuesday, August 6, 2019 9:01:46 AM
+ * Description:     IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
  * but is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
