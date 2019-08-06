@@ -68,27 +68,27 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 
       // mask,shift by one byte, and send upper address byte
 		i2c_master_write_byte(cmd, HI(address), true);
-//		printf("CMD: %X", HI(address));
+		printf("CMD: %X", HI(address));
 
       // mask and send lower address byte
 		i2c_master_write_byte(cmd, LO(address), true);
-//		printf(" %X\n", LO(address));
+		printf(" %X ", LO(address));
 
 	// Add extra dummy bit if this call is a safe load procedure.
 		//|| 0x0811 || 0x0812 || 0x0813 || 0x0814
-		if(address==0x0810 || address==0x0811 || address==0x0812 || address==0x0813 || address==0x0814) {
+		if(address>0x0809 && address<=0x0819) {
 			i2c_master_write_byte(cmd, 0x00, true);
-//			printf(" 00 " );
+			printf(" 00 " );
 		}
 
 
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-//			printf(" %X", *pData);
+			printf(" %X", *pData);
 			pData++;
 		}
-//		printf("\n");
+		printf("\n");
 	  // Send ACK bit on I2C bus
 
       // STOP I2C
@@ -136,29 +136,18 @@ void process_coefficient_for_i2c(float input_decimal, unsigned char coefficients
 
 
 void SIGMA_SAFELOAD_SINGLE(int device_address, char param_address, ADI_REG_TYPE *paramData){
-//	Step 1: write parameter data to one of the safeload data registers: 2064 (0x0810) - 28bit
-	//write the new parameter data that you want to be uploaded into the parameter RAM to the safeload data register.
-//This step includes the safeload data register address AND the data byte 3 is a dummy byte. 08 10 00 00 80 00 00
 
 	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0810, 4, paramData);
 
-	//	Step 2: write parameter address to one of the safeload address registers 2069 (0x0815) . Address of the parameter to be written - 10bit
-	//volume address is 0x00. Write the parameter memory location to the safeload address location. 08 15 00 00
 	ADI_REG_TYPE safe_load_address[1] = {param_address};
 	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0815, 1, safe_load_address);
 
-//	Step 3: the IST bit is set
-//	0x08 0x1C 0x00 0x3C
 
-	ADI_REG_TYPE safe_load_IST_flip[1] = {0x3C};
-	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081C, 1, safe_load_IST_flip);
+	ADI_REG_TYPE safe_load_IST_flip[2] = {0x00, 0x3C};
+	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081C, 2, safe_load_IST_flip);
 }
 
 void SIGMA_SAFELOAD_BIQUAD(int device_address, char param_address, float *paramData){
-
-
-//0x0810 || 0x0811 || 0x0812 || 0x0813 || 0x0814
-	//Addresses change for the different biquads left or right:
 
 
 		ADI_REG_TYPE temp[4] = {0x00, 0x00, 0x00, 0x00};
@@ -171,7 +160,6 @@ void SIGMA_SAFELOAD_BIQUAD(int device_address, char param_address, float *paramD
 
 		process_coefficient_for_i2c(*paramData, temp);
 		SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0811, 4, temp);
-	//	param_address = param_address+1;
 		safe_load_address[0] = param_address + 1;
 		SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0816, 1, safe_load_address);
 		paramData++;
@@ -194,8 +182,8 @@ void SIGMA_SAFELOAD_BIQUAD(int device_address, char param_address, float *paramD
 		SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x0819, 1, safe_load_address);
 
 
-	ADI_REG_TYPE safe_load_IST_flip[1] = {0x3C};
-	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081C, 1, safe_load_IST_flip);
+	ADI_REG_TYPE safe_load_IST_flip[2] = {0x00, 0x3C};
+	SIGMA_WRITE_REGISTER_BLOCK(device_address, 0x081C, 2, safe_load_IST_flip);
 }
 
 

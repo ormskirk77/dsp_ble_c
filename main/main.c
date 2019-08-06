@@ -38,7 +38,7 @@
 
 
 #define DSP_TABLE_TAG 			"DSP_BLE"
-#define VOL_PARAM_ADDR			0x05
+#define VOL_PARAM_ADDR			0x14
 #define BIQUAD_PARAM_BASE_ADDR	0x00
 
 
@@ -321,9 +321,9 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 			if(dsp_control_handle_table[IDX_CHAR_VOL_VAL] == param->write.handle){
 				float newVol = *param->write.value;
 				newVol = newVol/100;
-				printf("newVol: %f\n", newVol);
+	//			printf("newVol: %f\n", newVol);
 				process_coefficient_for_i2c(newVol, DSP_VOLUME_LEVEL);
-				printf("DSP_VOLUME_LEVEL: %X %X %X %X\n", DSP_VOLUME_LEVEL[0], DSP_VOLUME_LEVEL[1], DSP_VOLUME_LEVEL[2], DSP_VOLUME_LEVEL[3]);
+	//			printf("DSP_VOLUME_LEVEL: %X %X %X %X\n", DSP_VOLUME_LEVEL[0], DSP_VOLUME_LEVEL[1], DSP_VOLUME_LEVEL[2], DSP_VOLUME_LEVEL[3]);
 				SIGMA_SAFELOAD_SINGLE(0x34, VOL_PARAM_ADDR, DSP_VOLUME_LEVEL);
 
 
@@ -331,7 +331,6 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 				float newQ = *param->write.value;
 				newQ = newQ/25;
-				printf("newQ: %f\n", newQ);
 				float *ptr = calculate_coefficients(low_pass, gain, newQ, cutFreq);
 				SIGMA_SAFELOAD_BIQUAD(0x34, BIQUAD_PARAM_BASE_ADDR, ptr);
 
@@ -339,6 +338,7 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 				float newCutFreq = *param->write.value *10;
 				printf("New cut-off frequency value: %f\n", newCutFreq);
+
 				float *ptr = calculate_coefficients(low_pass, gain, Q, newCutFreq);
 			 	SIGMA_SAFELOAD_BIQUAD(0x34, BIQUAD_PARAM_BASE_ADDR, ptr);
 			}
@@ -547,9 +547,7 @@ void app_main(void)
 
 
 
-
-
-//    default_download_IC_1();
+    default_download_IC_1();
 
 }
 

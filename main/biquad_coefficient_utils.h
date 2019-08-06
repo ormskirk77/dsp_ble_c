@@ -22,8 +22,8 @@ enum filter {
 int f_s = 48000;
 
 float * calculate_coefficients(char filter, float gain, float Q, float cutFreq){
-	float coefficient_array[5];
 
+	static float coefficient_array[5] = {0,0,0,0,0};
 
 	switch(filter){
 	case low_pass:{
@@ -51,6 +51,12 @@ float * calculate_coefficients(char filter, float gain, float Q, float cutFreq){
 		printf("Filter type not recognised.\n");
 		break;
 	}
-	return &coefficient_array;
+//	printf("coefficient_array[0] = %f\n", coefficient_array[0]);
+//	printf("coefficient_array[1] = %f\n", coefficient_array[1]);
+//	printf("coefficient_array[2] = %f\n", coefficient_array[2]);
+//	printf("coefficient_array[3] = %f\n", coefficient_array[3]);
+//	printf("coefficient_array[4] = %f\n", coefficient_array[4]);
+
+	return coefficient_array;
 }
 #endif /* MAIN_BIQUAD_COEFFICIENT_UTILS_H_ */
