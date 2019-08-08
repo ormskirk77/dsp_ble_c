@@ -321,25 +321,28 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 			if(dsp_control_handle_table[IDX_CHAR_VOL_VAL] == param->write.handle){
 				float newVol = *param->write.value;
 				newVol = newVol/100;
-	//			printf("newVol: %f\n", newVol);
 				process_coefficient_for_i2c(newVol, DSP_VOLUME_LEVEL);
-	//			printf("DSP_VOLUME_LEVEL: %X %X %X %X\n", DSP_VOLUME_LEVEL[0], DSP_VOLUME_LEVEL[1], DSP_VOLUME_LEVEL[2], DSP_VOLUME_LEVEL[3]);
 				SIGMA_SAFELOAD_SINGLE(0x34, VOL_PARAM_ADDR, DSP_VOLUME_LEVEL);
 
 
 			} else if (dsp_control_handle_table[IDX_CHAR_Q_VAL] == param->write.handle){
-
 				float newQ = *param->write.value;
 				newQ = newQ/25;
 				float *ptr = calculate_coefficients(low_pass, gain, newQ, cutFreq);
 				SIGMA_SAFELOAD_BIQUAD(0x34, BIQUAD_PARAM_BASE_ADDR, ptr);
 
 			} else if (dsp_control_handle_table[IDX_CHAR_CUTFREQ_VAL] == param->write.handle) {
-
 				float newCutFreq = *param->write.value *10;
 				printf("New cut-off frequency value: %f\n", newCutFreq);
-
+				printf("Q: %f  |  newCutFreq: %f\n", Q, newCutFreq);
 				float *ptr = calculate_coefficients(low_pass, gain, Q, newCutFreq);
+			 	SIGMA_SAFELOAD_BIQUAD(0x34, BIQUAD_PARAM_BASE_ADDR, ptr);
+
+			} else if (dsp_control_handle_table[IDX_CHAR_GAIN_VAL] == param->write.handle){
+				float newGain = *param->write.value ;
+				printf("New gain value: %f\n", gain);
+				printf("Q: %f  |  newCutFreq: %f\n", Q, newGain);
+				float *ptr = calculate_coefficients(low_pass, newGain, Q, cutFreq);
 			 	SIGMA_SAFELOAD_BIQUAD(0x34, BIQUAD_PARAM_BASE_ADDR, ptr);
 			}
 
@@ -415,7 +418,6 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
     ESP_LOGD(DSP_TABLE_TAG, "%s evt %d", __func__, event);
     switch (event) {
     case BT_APP_EVT_STACK_UP: {
-    	printf("APP EVENT STCK UP!!!\n");
         /* set up bt device name */
         esp_bt_dev_set_device_name(DEVICE_NAME);
 
@@ -462,7 +464,9 @@ void app_main(void)
     }
     ESP_ERROR_CHECK( ret );
 
-
+/* I2C speeds:
+ * 500000, 250000, 166666, 125000, 100000, etc).
+ */
 
 	i2c_config_t conf;
 	conf.mode = I2C_MODE_MASTER;
@@ -470,7 +474,7 @@ void app_main(void)
 	conf.scl_io_num = SCL_PIN;
 	conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
 	conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-	conf.master.clk_speed = 100000;
+	conf.master.clk_speed = 500000;
 	i2c_param_config(I2C_NUM_0, &conf);
 
 	i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
@@ -493,6 +497,11 @@ void app_main(void)
            .tx_desc_auto_clear = true                                              //Auto clear tx descriptor on underflow
        };
 
+/*
+ * Data_in -> MP0 => 27
+ * LRCLK   -> MP4 => 25
+ * BCLK	   -> MP5 => 26
+ */
 
        i2s_driver_install(0, &i2s_config, 0, NULL);
    #ifdef CONFIG_A2DP_SINK_OUTPUT_INTERNAL_DAC
@@ -500,8 +509,8 @@ void app_main(void)
        i2s_set_pin(0, NULL);
    #else
        i2s_pin_config_t pin_config = {
-           .bck_io_num = 26,
-           .ws_io_num = 25,
+           .bck_io_num = 26, //BCLK
+           .ws_io_num = 25, //LRCLK
            .data_out_num = 27,
            .data_in_num = -1                                                       //Not used
        };

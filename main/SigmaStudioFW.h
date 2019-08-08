@@ -68,27 +68,27 @@ void SIGMA_WRITE_REGISTER_BLOCK(int devAddress, int address, int length, ADI_REG
 
       // mask,shift by one byte, and send upper address byte
 		i2c_master_write_byte(cmd, HI(address), true);
-		printf("CMD: %X", HI(address));
+//		printf("CMD: %X", HI(address));
 
       // mask and send lower address byte
 		i2c_master_write_byte(cmd, LO(address), true);
-		printf(" %X ", LO(address));
+//		printf(" %X ", LO(address));
 
 	// Add extra dummy bit if this call is a safe load procedure.
 		//|| 0x0811 || 0x0812 || 0x0813 || 0x0814
 		if(address>0x0809 && address<=0x0819) {
 			i2c_master_write_byte(cmd, 0x00, true);
-			printf(" 00 " );
+//			printf(" 00 " );
 		}
 
 
       // send data byte by byte
 		for(int i=0 ; i<length ; i++){
 			i2c_master_write_byte(cmd, *pData, true);
-			printf(" %X", *pData);
+//			printf(" %X", *pData);
 			pData++;
 		}
-		printf("\n");
+//		printf("\n");
 	  // Send ACK bit on I2C bus
 
       // STOP I2C

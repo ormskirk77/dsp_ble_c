@@ -1,7 +1,7 @@
 /*
- * File:           E:\sigma_files\one_biquad\basic_IC_1_REG.h
+ * File:           E:\sigma_files\one_biquad_c_i2s\basic_IC_1_REG.h
  *
- * Created:        Tuesday, August 6, 2019 8:58:16 PM
+ * Created:        Wednesday, August 7, 2019 5:46:03 PM
  * Description:    :IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -108,7 +108,7 @@
 /* MpCfg0  - Registers (IC 1) */
 #define REG_MPCFG0_IC_1_ADDR                      0x820
 #define REG_MPCFG0_IC_1_BYTE                      3
-#define REG_MPCFG0_IC_1_VALUE                     0x0
+#define REG_MPCFG0_IC_1_VALUE                     0xCC000C
 
 /* MpCfg1  - Registers (IC 1) */
 #define REG_MPCFG1_IC_1_ADDR                      0x821
@@ -331,18 +331,18 @@
 #define R16_LRCLK_POLARITY_IC_1_SHIFT             4
 
 /* MpCfg0 (IC 1) */
-#define R17_MFSELECT0_IC_1                        0x0    /* 000b	[2:0] */
-#define R17_MFINVERT0_IC_1                        0x0    /* 0b	[3] */
+#define R17_MFSELECT0_IC_1                        0x4    /* 100b	[2:0] */
+#define R17_MFINVERT0_IC_1                        0x1    /* 1b	[3] */
 #define R17_MFSELECT1_IC_1                        0x0    /* 000b	[6:4] */
 #define R17_MFINVERT1_IC_1                        0x0    /* 0b	[7] */
 #define R17_MFSELECT2_IC_1                        0x0    /* 000b	[10:8] */
 #define R17_MFINVERT2_IC_1                        0x0    /* 0b	[11] */
 #define R17_MFSELECT3_IC_1                        0x0    /* 000b	[14:12] */
 #define R17_MFINVERT3_IC_1                        0x0    /* 0b	[15] */
-#define R17_MFSELECT4_IC_1                        0x0    /* 000b	[18:16] */
-#define R17_MFINVERT4_IC_1                        0x0    /* 0b	[19] */
-#define R17_MFSELECT5_IC_1                        0x0    /* 000b	[22:20] */
-#define R17_MFINVERT5_IC_1                        0x0    /* 0b	[23] */
+#define R17_MFSELECT4_IC_1                        0x4    /* 100b	[18:16] */
+#define R17_MFINVERT4_IC_1                        0x1    /* 1b	[19] */
+#define R17_MFSELECT5_IC_1                        0x4    /* 100b	[22:20] */
+#define R17_MFINVERT5_IC_1                        0x1    /* 1b	[23] */
 #define R17_MFSELECT0_IC_1_MASK                   0x7
 #define R17_MFSELECT0_IC_1_SHIFT                  0
 #define R17_MFINVERT0_IC_1_MASK                   0x8
