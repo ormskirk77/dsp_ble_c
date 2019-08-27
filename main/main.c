@@ -92,7 +92,7 @@ static esp_ble_adv_data_t adv_data_config = {
     .p_service_data      = NULL,
     .service_uuid_len    = sizeof(service_uuid),
     .p_service_uuid      = service_uuid,
-    .flag = (ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
+    .flag = (ESP_BLE_ADV_FLAG_LIMIT_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
 };
 
 
@@ -109,7 +109,7 @@ static esp_ble_adv_data_t scan_rsp_data = {
     .p_service_data      = NULL,
     .service_uuid_len    = sizeof(service_uuid),
     .p_service_uuid      = service_uuid,
-    .flag = (ESP_BLE_ADV_FLAG_GEN_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
+    .flag = (ESP_BLE_ADV_FLAG_LIMIT_DISC | ESP_BLE_ADV_FLAG_BREDR_NOT_SPT),
 };
 
 
@@ -369,7 +369,7 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		            conn_params.timeout = 400;    // timeout = 400*10ms = 4000ms
 		            //start sent the update connection parameters to the peer device.
 		            esp_ble_gap_update_conn_params(&conn_params);
-
+		   //         esp_ble_gap_stop_advertising();
 
 
 			break;
@@ -439,6 +439,7 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
 
         /* set discoverable and connectable mode, wait to be connected */
         esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
+     //   esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_LIMITED_DISCOVERABLE);
         break;
     }
     default:
@@ -481,42 +482,6 @@ void app_main(void)
 
 
 
-    i2s_config_t i2s_config = {
-   #ifdef CONFIG_A2DP_SINK_OUTPUT_INTERNAL_DAC
-           .mode = I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN,
-   #else
-           .mode = I2S_MODE_MASTER | I2S_MODE_TX,                                  // Only TX
-   #endif
-           .sample_rate = 48000,
-           .bits_per_sample = 16,
-           .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,                           //2-channels
-           .communication_format = I2S_COMM_FORMAT_I2S_MSB,
-           .dma_buf_count = 6,
-           .dma_buf_len = 60,
-           .intr_alloc_flags = 0,                                                  //Default interrupt priority
-           .tx_desc_auto_clear = true                                              //Auto clear tx descriptor on underflow
-       };
-
-/*
- * Data_in -> MP0 => 27
- * LRCLK   -> MP4 => 25
- * BCLK	   -> MP5 => 26
- */
-
-       i2s_driver_install(0, &i2s_config, 0, NULL);
-   #ifdef CONFIG_A2DP_SINK_OUTPUT_INTERNAL_DAC
-       i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN);
-       i2s_set_pin(0, NULL);
-   #else
-       i2s_pin_config_t pin_config = {
-           .bck_io_num = 26, //BCLK
-           .ws_io_num = 25, //LRCLK
-           .data_out_num = 27,
-           .data_in_num = -1                                                       //Not used
-       };
-
-       i2s_set_pin(0, &pin_config);
-   #endif
 
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     ret = esp_bt_controller_init(&bt_cfg);
@@ -548,15 +513,13 @@ void app_main(void)
     bt_app_work_dispatch(bt_av_hdl_stack_evt, BT_APP_EVT_STACK_UP, NULL, 0, NULL);
 
     esp_ble_gatts_register_callback(gatts_event_handler);
-    printf("GATTS profile event handler added..\n");
     esp_ble_gap_register_callback(gap_event_handler);
-    printf("GAP profile event handler added.\n");
     esp_ble_gatts_app_register(DSP_APP_ID);
     esp_ble_gatt_set_local_mtu(500);
 
+    printf("Startup complete\n");
 
-
-    default_download_IC_1();
+//    default_download_IC_1();
 
 }
 
